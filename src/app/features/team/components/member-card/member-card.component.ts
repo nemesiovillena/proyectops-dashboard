@@ -13,8 +13,8 @@ import { CardComponent } from '@shared/components';
         <div class="member-avatar">{{ member.name.charAt(0) }}</div>
         <h3>{{ member.name }}</h3>
         <p class="member-role">{{ member.role }}</p>
-        <span class="member-availability" [class]="'status-' + member.availability">{{ member.availability }}</span>
-        <div class="member-projects">{{ member.projects.length }} projects</div>
+        <span class="member-availability" [class]="'status-' + member.availability">{{ getAvailabilityLabel(member.availability) }}</span>
+        <div class="member-projects">{{ member.projects.length }} proyectos</div>
       </a>
     </app-card>
   `,
@@ -32,4 +32,13 @@ import { CardComponent } from '@shared/components';
 })
 export class MemberCardComponent {
   @Input({ required: true }) member!: TeamMember;
+
+  getAvailabilityLabel(availability: string): string {
+    const labels: Record<string, string> = {
+      'available': 'Disponible',
+      'busy': 'Ocupado',
+      'away': 'Ausente'
+    };
+    return labels[availability] || availability;
+  }
 }
