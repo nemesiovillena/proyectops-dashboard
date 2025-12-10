@@ -6,9 +6,9 @@ import { CardComponent } from '@shared/components';
   standalone: true,
   imports: [CardComponent],
   template: `
-    <app-card title="Recent Activity">
+    <app-card title="Actividad Reciente">
       <div class="activity-list">
-        <p>No recent activity</p>
+        <p>No hay actividad reciente</p>
       </div>
     </app-card>
   `,

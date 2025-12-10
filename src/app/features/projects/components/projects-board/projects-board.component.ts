@@ -26,10 +26,10 @@ export class ProjectsBoardComponent implements OnInit {
 
   // Kanban columns
   kanbanColumns = [
-    { id: 'planning', label: 'Planning', color: '#6366f1' },
-    { id: 'in-progress', label: 'In Progress', color: '#3b82f6' },
-    { id: 'on-hold', label: 'On Hold', color: '#f59e0b' },
-    { id: 'completed', label: 'Completed', color: '#10b981' }
+    { id: 'planning', label: 'Planificación', color: '#6366f1' },
+    { id: 'in-progress', label: 'En Progreso', color: '#3b82f6' },
+    { id: 'on-hold', label: 'En Espera', color: '#f59e0b' },
+    { id: 'completed', label: 'Completado', color: '#10b981' }
   ];
 
   // Group projects by status

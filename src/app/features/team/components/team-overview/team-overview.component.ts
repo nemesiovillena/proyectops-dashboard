@@ -9,9 +9,9 @@ import { MemberCardComponent } from '../member-card/member-card.component';
   imports: [LoadingSpinnerComponent, ErrorMessageComponent, MemberCardComponent],
   template: `
     <div class="team-overview">
-      <h1>Team Overview</h1>
+      <h1>Resumen del Equipo</h1>
       @if (loading()) {
-        <app-loading-spinner message="Loading team..."></app-loading-spinner>
+        <app-loading-spinner message="Cargando equipo..."></app-loading-spinner>
       } @else if (error()) {
         <app-error-message [message]="error()!" (retry)="onRetry()"></app-error-message>
       } @else {

@@ -22,7 +22,7 @@
   <!-- Progress Bar -->
   <div class="mb-4">
     <div class="flex items-center justify-between mb-2">
-      <span class="text-xs font-medium text-neutral-600">Progress</span>
+      <span class="text-xs font-medium text-neutral-600">Progreso</span>
       <span class="text-xs font-bold text-neutral-900">{{ project.progress }}%</span>
     </div>
     <div class="w-full bg-neutral-200 rounded-full h-2 overflow-hidden">
@@ -37,7 +37,7 @@
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
       </svg>
-      <span>Due: {{ project.endDate | dateFormat:'short' }}</span>
+      <span>Vencimiento: {{ project.endDate | dateFormat:'short' }}</span>
     </div>
   </div>
 </a>

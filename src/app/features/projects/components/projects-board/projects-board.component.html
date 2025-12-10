@@ -2,9 +2,9 @@
   <!-- Header -->
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-3xl font-bold text-neutral-900 mb-2">Projects Board</h1>
+      <h1 class="text-3xl font-bold text-neutral-900 mb-2">Tablero de Proyectos</h1>
       <p class="text-neutral-600">
-        Manage your projects with a visual kanban board
+        Gestiona tus proyectos con un tablero kanban visual
         <span class="ml-2 px-2 py-1 bg-primary-50 text-primary-700 rounded-lg text-sm font-medium">
           {{ projects().length }} Total
         </span>
@@ -15,12 +15,12 @@
       <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
-      New Project
+      Nuevo Proyecto
     </a>
   </div>
 
   @if (loading()) {
-    <app-loading-spinner message="Loading projects..."></app-loading-spinner>
+    <app-loading-spinner message="Cargando proyectos..."></app-loading-spinner>
   } @else if (error()) {
     <app-error-message [message]="error()!" (retry)="onRetry()"></app-error-message>
   } @else {
@@ -60,7 +60,7 @@
                 <svg class="w-12 h-12 mx-auto text-neutral-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                 </svg>
-                <p class="text-sm text-neutral-500">No projects in {{ column.label }}</p>
+                <p class="text-sm text-neutral-500">No hay proyectos en {{ column.label }}</p>
               </div>
             }
           </div>

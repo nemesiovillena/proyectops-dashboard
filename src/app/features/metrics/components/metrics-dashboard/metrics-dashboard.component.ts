@@ -9,15 +9,15 @@ import { StatCardComponent } from '../stat-card/stat-card.component';
   imports: [CardComponent, LoadingSpinnerComponent, StatCardComponent],
   template: `
     <div class="metrics-dashboard">
-      <h1>Metrics Dashboard</h1>
+      <h1>Panel de Métricas</h1>
       @if (loading()) {
-        <app-loading-spinner message="Loading metrics..."></app-loading-spinner>
+        <app-loading-spinner message="Cargando métricas..."></app-loading-spinner>
       } @else if (metrics()) {
         <div class="metrics-grid">
-          <app-stat-card title="Total Projects" [value]="metrics()!.totalProjects" icon="📊"></app-stat-card>
-          <app-stat-card title="Active Projects" [value]="metrics()!.activeProjects" icon="🚀"></app-stat-card>
-          <app-stat-card title="Completed Tasks" [value]="metrics()!.completedTasks" icon="✅"></app-stat-card>
-          <app-stat-card title="Team Size" [value]="metrics()!.teamSize" icon="👥"></app-stat-card>
+          <app-stat-card title="Proyectos Totales" [value]="metrics()!.totalProjects" icon="📊"></app-stat-card>
+          <app-stat-card title="Proyectos Activos" [value]="metrics()!.activeProjects" icon="🚀"></app-stat-card>
+          <app-stat-card title="Tareas Completadas" [value]="metrics()!.completedTasks" icon="✅"></app-stat-card>
+          <app-stat-card title="Tamaño del Equipo" [value]="metrics()!.teamSize" icon="👥"></app-stat-card>
         </div>
       }
     </div>

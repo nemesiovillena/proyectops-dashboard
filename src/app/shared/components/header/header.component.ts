@@ -9,5 +9,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  projectTitle = 'ProjectOps Dashboard';
+  projectTitle = 'Panel ProjectOps';
 }

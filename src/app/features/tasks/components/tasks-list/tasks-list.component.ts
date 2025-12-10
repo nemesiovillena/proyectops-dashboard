@@ -11,12 +11,12 @@ import { TaskItemComponent } from '../task-item/task-item.component';
   template: `
     <div class="tasks-list">
       <div class="tasks-list-header">
-        <h1>Tasks</h1>
-        <a routerLink="/tasks/new" class="btn-new-task">+ New Task</a>
+        <h1>Tareas</h1>
+        <a routerLink="/tasks/new" class="btn-new-task">+ Nueva Tarea</a>
       </div>
 
       @if (loading()) {
-        <app-loading-spinner message="Loading tasks..."></app-loading-spinner>
+        <app-loading-spinner message="Cargando tareas..."></app-loading-spinner>
       } @else if (error()) {
         <app-error-message [message]="error()!" (retry)="onRetry()"></app-error-message>
       } @else {
@@ -24,7 +24,7 @@ import { TaskItemComponent } from '../task-item/task-item.component';
           @for (task of tasks(); track task.id) {
             <app-task-item [task]="task"></app-task-item>
           } @empty {
-            <p class="no-tasks">No tasks found</p>
+            <p class="no-tasks">No se encontraron tareas</p>
           }
         </div>
       }
