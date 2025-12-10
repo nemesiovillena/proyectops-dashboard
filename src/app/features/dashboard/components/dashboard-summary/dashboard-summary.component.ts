@@ -15,17 +15,17 @@ import { TeamService } from '@core/services/team.service';
         <div class="summary-item">
           <h3>{{ projectsService.activeProjects().length }}</h3>
           <p>Proyectos Activos</p>
-          <a routerLink="/projects">Ver todos →</a>
+          <a routerLink="/proyectos">Ver todos →</a>
         </div>
         <div class="summary-item">
           <h3>{{ openTasksCount() }}</h3>
           <p>Tareas Abiertas</p>
-          <a routerLink="/tasks">Ver todas →</a>
+          <a routerLink="/tareas">Ver todas →</a>
         </div>
         <div class="summary-item">
           <h3>{{ teamService.teamMembers().length }}</h3>
           <p>Miembros del Equipo</p>
-          <a routerLink="/team">Ver todos →</a>
+          <a routerLink="/equipo">Ver todos →</a>
         </div>
       </div>
     </app-card>

@@ -9,7 +9,7 @@ export const projectsRoutes: Routes = [
     component: ProjectsBoardComponent
   },
   {
-    path: 'new',
+    path: 'nuevo',
     component: ProjectFormComponent
   },
   {

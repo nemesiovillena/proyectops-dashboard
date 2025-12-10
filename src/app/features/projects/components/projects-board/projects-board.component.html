@@ -10,8 +10,8 @@
         </span>
       </p>
     </div>
-    <a routerLink="/projects/new"
-       class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-xl font-medium shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200">
+    <a routerLink="/proyectos/nuevo"
+      class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-xl font-medium shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200">
       <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
@@ -20,52 +20,47 @@
   </div>
 
   @if (loading()) {
-    <app-loading-spinner message="Cargando proyectos..."></app-loading-spinner>
+  <app-loading-spinner message="Cargando proyectos..."></app-loading-spinner>
   } @else if (error()) {
-    <app-error-message [message]="error()!" (retry)="onRetry()"></app-error-message>
+  <app-error-message [message]="error()!" (retry)="onRetry()"></app-error-message>
   } @else {
-    <!-- Kanban Board -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      @for (column of kanbanColumns; track column.id) {
-        <div class="bg-neutral-50 rounded-2xl p-4 min-h-[600px] transition-all duration-300"
-             [class.ring-2]="dragOverColumnId() === column.id"
-             [class.ring-primary-400]="dragOverColumnId() === column.id"
-             (dragover)="onDragOver($event, column.id)"
-             (dragleave)="onDragLeave(column.id)"
-             (drop)="onDrop($event, column.id)">
+  <!-- Kanban Board -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    @for (column of kanbanColumns; track column.id) {
+    <div class="bg-neutral-50 rounded-2xl p-4 min-h-[600px] transition-all duration-300"
+      [class.ring-2]="dragOverColumnId() === column.id" [class.ring-primary-400]="dragOverColumnId() === column.id"
+      (dragover)="onDragOver($event, column.id)" (dragleave)="onDragLeave(column.id)"
+      (drop)="onDrop($event, column.id)">
 
-          <!-- Column Header -->
-          <div class="flex items-center justify-between mb-4 pb-3 border-b-2"
-               [style.border-bottom-color]="column.color">
-            <h2 class="text-lg font-bold text-neutral-900">{{ column.label }}</h2>
-            <span class="w-7 h-7 flex items-center justify-center rounded-full text-sm font-bold text-white"
-                  [style.background-color]="column.color">
-              {{ projectsByStatus()[column.id].length }}
-            </span>
-          </div>
+      <!-- Column Header -->
+      <div class="flex items-center justify-between mb-4 pb-3 border-b-2" [style.border-bottom-color]="column.color">
+        <h2 class="text-lg font-bold text-neutral-900">{{ column.label }}</h2>
+        <span class="w-7 h-7 flex items-center justify-center rounded-full text-sm font-bold text-white"
+          [style.background-color]="column.color">
+          {{ projectsByStatus()[column.id].length }}
+        </span>
+      </div>
 
-          <!-- Column Content -->
-          <div class="space-y-3">
-            @for (project of projectsByStatus()[column.id]; track project.id) {
-              <div class="transition-all duration-200"
-                   [class.opacity-50]="draggedProjectId() === project.id"
-                   [class.scale-105]="draggedProjectId() === project.id"
-                   draggable="true"
-                   (dragstart)="onDragStart($event, project.id)"
-                   (dragend)="onDragEnd()">
-                <app-project-card [project]="project"></app-project-card>
-              </div>
-            } @empty {
-              <div class="text-center py-8">
-                <svg class="w-12 h-12 mx-auto text-neutral-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                </svg>
-                <p class="text-sm text-neutral-500">No hay proyectos en {{ column.label }}</p>
-              </div>
-            }
-          </div>
+      <!-- Column Content -->
+      <div class="space-y-3">
+        @for (project of projectsByStatus()[column.id]; track project.id) {
+        <div class="transition-all duration-200" [class.opacity-50]="draggedProjectId() === project.id"
+          [class.scale-105]="draggedProjectId() === project.id" draggable="true"
+          (dragstart)="onDragStart($event, project.id)" (dragend)="onDragEnd()">
+          <app-project-card [project]="project"></app-project-card>
         </div>
-      }
+        } @empty {
+        <div class="text-center py-8">
+          <svg class="w-12 h-12 mx-auto text-neutral-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+          </svg>
+          <p class="text-sm text-neutral-500">No hay proyectos en {{ column.label }}</p>
+        </div>
+        }
+      </div>
     </div>
+    }
+  </div>
   }
 </div>

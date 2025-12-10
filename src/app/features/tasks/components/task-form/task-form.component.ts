@@ -35,7 +35,7 @@ export class TaskFormComponent implements OnInit {
   onSubmit(): void {
     if (this.taskForm.valid) {
       this.tasksService.createTask(this.taskForm.value as any);
-      this.router.navigate(['/tasks']);
+      this.router.navigate(['/tareas']);
     }
   }
 }

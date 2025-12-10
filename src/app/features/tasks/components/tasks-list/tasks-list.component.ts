@@ -12,7 +12,7 @@ import { TaskItemComponent } from '../task-item/task-item.component';
     <div class="tasks-list">
       <div class="tasks-list-header">
         <h1>Tareas</h1>
-        <a routerLink="/tasks/new" class="btn-new-task">+ Nueva Tarea</a>
+        <a routerLink="/tareas/nuevo" class="btn-new-task">+ Nueva Tarea</a>
       </div>
 
       @if (loading()) {

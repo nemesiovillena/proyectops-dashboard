@@ -11,7 +11,7 @@ import { DateFormatPipe } from '@shared/pipes';
     <div class="task-item">
       <div class="task-priority" [class]="'priority-' + task.priority"></div>
       <div class="task-content">
-        <h3><a [routerLink]="['/tasks', task.id]">{{ task.title }}</a></h3>
+        <h3><a [routerLink]="['/tareas', task.id]">{{ task.title }}</a></h3>
         <p>{{ task.description }}</p>
         <div class="task-meta">
           <span class="task-status" [style.background-color]="task.status.color">{{ task.status.label }}</span>

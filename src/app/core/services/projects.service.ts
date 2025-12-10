@@ -39,7 +39,7 @@ export class ProjectsService {
       },
       error: (err) => {
         console.error('Error loading projects:', err);
-        this.error.set('Failed to load projects');
+        this.error.set('Error al cargar los proyectos');
         this.loading.set(false);
       }
     });
@@ -47,14 +47,22 @@ export class ProjectsService {
 
   getProjectById(id: string): void {
     this.loading.set(true);
+    this.error.set(null);
     // Simulate API delay
     setTimeout(() => {
-      const data = this.mockDataService.getProjectById(id);
-      if (data) {
-        this.selectedProject.set(data);
+      // First try to find in loaded projects (includes newly created ones)
+      let project = this.projects().find(p => p.id === id);
+
+      // If not found, try mock data
+      if (!project) {
+        project = this.mockDataService.getProjectById(id);
+      }
+
+      if (project) {
+        this.selectedProject.set(project);
         this.loading.set(false);
       } else {
-        this.error.set('Project not found');
+        this.error.set('Proyecto no encontrado');
         this.loading.set(false);
       }
     }, 300);

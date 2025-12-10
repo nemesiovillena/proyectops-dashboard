@@ -8,33 +8,33 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'panel',
         pathMatch: 'full'
       },
       {
-        path: 'dashboard',
+        path: 'panel',
         loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes)
       },
       {
-        path: 'projects',
+        path: 'proyectos',
         loadChildren: () => import('./features/projects/projects.routes').then(m => m.projectsRoutes)
       },
       {
-        path: 'tasks',
+        path: 'tareas',
         loadChildren: () => import('./features/tasks/tasks.routes').then(m => m.tasksRoutes)
       },
       {
-        path: 'team',
+        path: 'equipo',
         loadChildren: () => import('./features/team/team.routes').then(m => m.teamRoutes)
       },
       {
-        path: 'metrics',
+        path: 'metricas',
         loadChildren: () => import('./features/metrics/metrics.routes').then(m => m.metricsRoutes)
       }
     ]
   },
   {
     path: '**',
-    redirectTo: 'dashboard'
+    redirectTo: 'panel'
   }
 ];

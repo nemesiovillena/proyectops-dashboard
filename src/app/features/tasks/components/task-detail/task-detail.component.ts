@@ -10,7 +10,7 @@ import { DateFormatPipe } from '@shared/pipes';
   imports: [RouterLink, CardComponent, LoadingSpinnerComponent, DateFormatPipe],
   template: `
     <div class="task-detail">
-      <a routerLink="/tasks" class="back-link">← Back to Tasks</a>
+      <a routerLink="/tareas" class="back-link">← Volver a Tareas</a>
       @if (loading()) {
         <app-loading-spinner></app-loading-spinner>
       } @else if (task()) {
@@ -18,10 +18,10 @@ import { DateFormatPipe } from '@shared/pipes';
           <h1>{{ task()!.title }}</h1>
           <p>{{ task()!.description }}</p>
           <div class="task-info">
-            <p><strong>Status:</strong> {{ task()!.status.label }}</p>
-            <p><strong>Priority:</strong> {{ task()!.priority }}</p>
-            <p><strong>Assigned to:</strong> {{ task()!.assignedTo.name }}</p>
-            <p><strong>Due Date:</strong> {{ task()!.dueDate | dateFormat:'medium' }}</p>
+            <p><strong>Estado:</strong> {{ task()!.status.label }}</p>
+            <p><strong>Prioridad:</strong> {{ task()!.priority }}</p>
+            <p><strong>Asignado a:</strong> {{ task()!.assignedTo.name }}</p>
+            <p><strong>Fecha de vencimiento:</strong> {{ task()!.dueDate | dateFormat:'medium' }}</p>
           </div>
         </app-card>
       }

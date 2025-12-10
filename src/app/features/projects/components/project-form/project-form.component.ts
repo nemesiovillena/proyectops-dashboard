@@ -27,7 +27,7 @@ export class ProjectFormComponent {
   onSubmit(): void {
     if (this.projectForm.valid) {
       this.projectsService.createProject(this.projectForm.value as any);
-      this.router.navigate(['/projects']);
+      this.router.navigate(['/proyectos']);
     }
   }
 }

@@ -9,15 +9,15 @@ import { CardComponent, LoadingSpinnerComponent } from '@shared/components';
   imports: [RouterLink, CardComponent, LoadingSpinnerComponent],
   template: `
     <div class="member-detail">
-      <a routerLink="/team" class="back-link">← Back to Team</a>
+      <a routerLink="/team" class="back-link">← Volver al Equipo</a>
       @if (loading()) {
         <app-loading-spinner></app-loading-spinner>
       } @else if (member()) {
         <app-card>
           <h1>{{ member()!.name }}</h1>
           <p>{{ member()!.email }}</p>
-          <p><strong>Role:</strong> {{ member()!.role }}</p>
-          <p><strong>Availability:</strong> {{ member()!.availability }}</p>
+          <p><strong>Rol:</strong> {{ member()!.role }}</p>
+          <p><strong>Disponibilidad:</strong> {{ member()!.availability }}</p>
         </app-card>
       }
     </div>
