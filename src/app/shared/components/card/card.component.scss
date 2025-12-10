@@ -1,0 +1,28 @@
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  &-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  &-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+  }
+
+  &-subtitle {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+
+  &-content {
+    padding: 1.25rem;
+  }
+}

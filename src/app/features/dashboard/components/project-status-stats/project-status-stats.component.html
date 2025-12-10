@@ -1,0 +1,20 @@
+<div class="bg-white rounded-2xl shadow-soft p-6 border border-neutral-100">
+    <h3 class="text-lg font-bold text-neutral-900 mb-6">Project Status Overview</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        @for (stat of statusCounts(); track stat.status.id) {
+        <div class="relative p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-md hover:scale-105 cursor-pointer"
+             [style.border-color]="stat.status.color">
+            <div class="flex flex-col items-center text-center">
+                <span class="text-3xl font-bold mb-1" [style.color]="stat.status.color">
+                    {{ stat.count }}
+                </span>
+                <span class="text-sm font-medium text-neutral-600">
+                    {{ stat.status.label }}
+                </span>
+            </div>
+            <div class="absolute top-2 right-2 w-3 h-3 rounded-full"
+                 [style.background-color]="stat.status.color"></div>
+        </div>
+        }
+    </div>
+</div>

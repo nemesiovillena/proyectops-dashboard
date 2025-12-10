@@ -1,0 +1,110 @@
+.project-detail {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  &-header {
+    margin-bottom: 1.5rem;
+
+    .back-link {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.project-title {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  color: #1e293b;
+}
+
+.project-status {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.project-info {
+  display: grid;
+  gap: 2rem;
+}
+
+.info-section {
+  h3 {
+    margin: 0 0 1rem;
+    font-size: 1.125rem;
+    color: #1e293b;
+  }
+
+  p {
+    margin: 0.5rem 0;
+    color: #64748b;
+    line-height: 1.6;
+  }
+}
+
+.progress-bar {
+  height: 1.5rem;
+  background-color: #e2e8f0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+
+  .progress-fill {
+    height: 100%;
+    background-color: #3b82f6;
+    transition: width 0.3s;
+  }
+}
+
+.team-members {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.team-member {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-radius: 0.5rem;
+
+  .member-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: #3b82f6;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .member-info {
+    .member-name {
+      margin: 0;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .member-role {
+      margin: 0.25rem 0 0;
+      font-size: 0.875rem;
+      color: #64748b;
+    }
+  }
+}

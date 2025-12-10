@@ -1,0 +1,26 @@
+.project-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  .filter-search,
+  .filter-select {
+    padding: 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    font-size: 0.9375rem;
+
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+  }
+
+  .filter-search {
+    flex: 1;
+  }
+
+  .filter-select {
+    min-width: 150px;
+  }
+}
