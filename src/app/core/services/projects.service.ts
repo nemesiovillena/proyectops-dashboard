@@ -17,7 +17,7 @@ export class ProjectsService {
 
   filteredProjects = computed(() => this.projects());
   activeProjects = computed(() =>
-    this.projects().filter(p => p.status.label !== 'Completed')
+    this.projects().filter(p => p.status.label !== 'Completado')
   );
 
   loadProjects(): void {

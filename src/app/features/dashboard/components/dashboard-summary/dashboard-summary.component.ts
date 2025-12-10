@@ -44,6 +44,6 @@ export class DashboardSummaryComponent {
   teamService = inject(TeamService);
 
   openTasksCount = computed(() =>
-    this.tasksService.tasks().filter(t => t.status.label !== 'Completed').length
+    this.tasksService.tasks().filter(t => t.status.label !== 'Completado').length
   );
 }

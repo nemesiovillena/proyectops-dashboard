@@ -36,10 +36,10 @@ export class ProjectsBoardComponent implements OnInit {
   projectsByStatus = computed(() => {
     const allProjects = this.projects();
     const grouped: Record<string, Project[]> = {
-      planning: allProjects.filter(p => p.status.label === 'Planning'),
-      'in-progress': allProjects.filter(p => p.status.label === 'In Progress'),
-      'on-hold': allProjects.filter(p => p.status.label === 'On Hold'),
-      completed: allProjects.filter(p => p.status.label === 'Completed')
+      planning: allProjects.filter(p => p.status.label === 'Planificación'),
+      'in-progress': allProjects.filter(p => p.status.label === 'En Progreso'),
+      'on-hold': allProjects.filter(p => p.status.label === 'En Espera'),
+      completed: allProjects.filter(p => p.status.label === 'Completado')
     };
     return grouped;
   });
@@ -92,10 +92,10 @@ export class ProjectsBoardComponent implements OnInit {
 
     // Get the new status based on column
     const statusMap: Record<string, string> = {
-      'planning': 'Planning',
-      'in-progress': 'In Progress',
-      'on-hold': 'On Hold',
-      'completed': 'Completed'
+      'planning': 'Planificación',
+      'in-progress': 'En Progreso',
+      'on-hold': 'En Espera',
+      'completed': 'Completado'
     };
 
     const newStatusLabel = statusMap[targetColumnId];

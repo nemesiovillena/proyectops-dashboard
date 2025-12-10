@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nTraducción completa de estados y etiquetas al castellano\n\nSe han traducido todos los estados de proyectos y tareas en el servicio de datos mock y componentes relacionados:\n\nEstados de Proyectos:\n- Planning → Planificación\n- In Progress → En Progreso\n- On Hold → En Espera\n- Completed → Completado\n\nEstados de Tareas:\n- Todo → Pendiente\n- In Progress → En Progreso\n- Review → Revisión\n- Completed → Completado\n\nComponentes actualizados:\n- mock-data.service.ts: Estados traducidos\n- projects-board.component.ts: Filtros y mapeo de estados\n- projects.service.ts: Filtro de proyectos activos\n- dashboard-summary.component.ts: Contador de tareas abiertas\n- task-item.component.ts: Etiquetas \"Due\" y \"Assigned to\"\n\nAhora todo el proyecto está completamente en castellano.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)"
     ]
   }
 }

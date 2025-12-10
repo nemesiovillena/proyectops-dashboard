@@ -7,17 +7,17 @@ import { Project, Task, TeamMember, Status } from '@core/models';
 export class MockDataService {
   // Statuses
   private readonly projectStatuses: Status[] = [
-    { id: '1', label: 'Planning', color: '#6366f1', type: 'project', order: 1 },
-    { id: '2', label: 'In Progress', color: '#3b82f6', type: 'project', order: 2 },
-    { id: '3', label: 'On Hold', color: '#f59e0b', type: 'project', order: 3 },
-    { id: '4', label: 'Completed', color: '#10b981', type: 'project', order: 4 }
+    { id: '1', label: 'Planificación', color: '#6366f1', type: 'project', order: 1 },
+    { id: '2', label: 'En Progreso', color: '#3b82f6', type: 'project', order: 2 },
+    { id: '3', label: 'En Espera', color: '#f59e0b', type: 'project', order: 3 },
+    { id: '4', label: 'Completado', color: '#10b981', type: 'project', order: 4 }
   ];
 
   private readonly taskStatuses: Status[] = [
-    { id: '5', label: 'Todo', color: '#6366f1', type: 'task', order: 1 },
-    { id: '6', label: 'In Progress', color: '#3b82f6', type: 'task', order: 2 },
-    { id: '7', label: 'Review', color: '#f59e0b', type: 'task', order: 3 },
-    { id: '8', label: 'Completed', color: '#10b981', type: 'task', order: 4 }
+    { id: '5', label: 'Pendiente', color: '#6366f1', type: 'task', order: 1 },
+    { id: '6', label: 'En Progreso', color: '#3b82f6', type: 'task', order: 2 },
+    { id: '7', label: 'Revisión', color: '#f59e0b', type: 'task', order: 3 },
+    { id: '8', label: 'Completado', color: '#10b981', type: 'task', order: 4 }
   ];
 
   // Team Members
@@ -312,10 +312,10 @@ export class MockDataService {
   getMetrics() {
     return {
       totalProjects: this.mockProjects.length,
-      activeProjects: this.mockProjects.filter(p => p.status.label === 'In Progress').length,
-      completedProjects: this.mockProjects.filter(p => p.status.label === 'Completed').length,
+      activeProjects: this.mockProjects.filter(p => p.status.label === 'En Progreso').length,
+      completedProjects: this.mockProjects.filter(p => p.status.label === 'Completado').length,
       totalTasks: this.mockTasks.length,
-      completedTasks: this.mockTasks.filter(t => t.status.label === 'Completed').length,
+      completedTasks: this.mockTasks.filter(t => t.status.label === 'Completado').length,
       teamSize: this.mockTeamMembers.length,
       averageProjectDuration: 180,
       budgetUtilization: 75

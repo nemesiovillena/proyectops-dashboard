@@ -15,8 +15,8 @@ import { DateFormatPipe } from '@shared/pipes';
         <p>{{ task.description }}</p>
         <div class="task-meta">
           <span class="task-status" [style.background-color]="task.status.color">{{ task.status.label }}</span>
-          <span>Due: {{ task.dueDate | dateFormat:'short' }}</span>
-          <span>Assigned to: {{ task.assignedTo.name }}</span>
+          <span>Vencimiento: {{ task.dueDate | dateFormat:'short' }}</span>
+          <span>Asignado a: {{ task.assignedTo.name }}</span>
         </div>
       </div>
     </div>
