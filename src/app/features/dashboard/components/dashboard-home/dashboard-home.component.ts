@@ -15,7 +15,7 @@ import { TeamService } from '@core/services/team.service';
   template: `
     <div class="space-y-8">
       <!-- Welcome Header -->
-      <div class="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-3xl p-8 text-white shadow-lg">
+      <div class="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-3xl p-8 text-white shadow-lg mb-8">
         <div class="flex items-center justify-between">
           <div>
             <h1 class="text-3xl font-bold mb-2">¡Bienvenido de nuevo! 👋</h1>
@@ -30,10 +30,10 @@ import { TeamService } from '@core/services/team.service';
       </div>
 
       <!-- Quick Stats -->
-      <app-dashboard-summary></app-dashboard-summary>
+      <app-dashboard-summary class="mb-8 block"></app-dashboard-summary>
 
       <!-- Project Status Stats -->
-      <app-project-status-stats></app-project-status-stats>
+      <app-project-status-stats class="mt-8 block"></app-project-status-stats>
 
       <!-- Recent Activity -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
