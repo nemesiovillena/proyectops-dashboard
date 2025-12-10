@@ -6,7 +6,7 @@
       "description": "Complete overhaul of the e-commerce platform with modern UI/UX",
       "status": {
         "id": "2",
-        "label": "In Progress",
+        "label": "En Progreso",
         "color": "#3b82f6",
         "type": "project",
         "order": 2
@@ -25,7 +25,7 @@
       "description": "Native iOS and Android app for customer engagement",
       "status": {
         "id": "2",
-        "label": "In Progress",
+        "label": "En Progreso",
         "color": "#3b82f6",
         "type": "project",
         "order": 2
@@ -44,7 +44,7 @@
       "description": "Migrate all services to AWS cloud infrastructure",
       "status": {
         "id": "1",
-        "label": "Planning",
+        "label": "Planificación",
         "color": "#6366f1",
         "type": "project",
         "order": 1
@@ -63,7 +63,7 @@
       "description": "Add new features and improve existing customer portal",
       "status": {
         "id": "4",
-        "label": "Completed",
+        "label": "Completado",
         "color": "#10b981",
         "type": "project",
         "order": 4
@@ -82,7 +82,7 @@
       "description": "Implement centralized API gateway for microservices",
       "status": {
         "id": "3",
-        "label": "On Hold",
+        "label": "En Espera",
         "color": "#f59e0b",
         "type": "project",
         "order": 3
