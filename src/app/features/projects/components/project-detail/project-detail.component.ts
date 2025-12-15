@@ -20,16 +20,17 @@ export class ProjectDetailComponent implements OnInit {
   error = this.projectsService.error;
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  async loadData(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.projectsService.getProjectById(id);
+      await this.projectsService.getProjectById(id);
     }
   }
 
   onRetry(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.projectsService.getProjectById(id);
-    }
+    this.loadData();
   }
 }

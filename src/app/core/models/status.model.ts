@@ -1,9 +1,10 @@
 export type StatusType = 'project' | 'task';
 
 export interface Status {
-  id: string;
+  id?: string;
   label: string;
+  value: string;
   color: string;
-  type: StatusType;
-  order: number;
+  type?: StatusType;
+  order?: number;
 }

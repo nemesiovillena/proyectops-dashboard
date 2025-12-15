@@ -5,9 +5,9 @@ export interface TeamMember {
   name: string;
   email: string;
   role: string;
-  avatar: string;
+  avatar?: string;
   projects: string[];
   availability: MemberAvailability;
-  skills: string[];
-  joinedAt: Date;
+  skills?: string[];
+  joinedAt?: Date;
 }

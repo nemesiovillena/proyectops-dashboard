@@ -1,14 +1,12 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { MockDataService } from './mock-data.service';
 import { Project } from '@core/models';
+import { SupabaseService } from './supabase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectsService {
-  private http = inject(HttpClient);
-  private mockDataService = inject(MockDataService);
+  private supabaseService = inject(SupabaseService);
 
   projects = signal<Project[]>([]);
   selectedProject = signal<Project | null>(null);
@@ -20,94 +18,255 @@ export class ProjectsService {
     this.projects().filter(p => p.status.label !== 'Completado')
   );
 
-  loadProjects(): void {
-    this.loading.set(true);
-    this.http.get<{ projects: any[] }>('assets/data/projects.json').subscribe({
-      next: (data) => {
-        const mappedProjects: Project[] = data.projects.map(p => ({
-          ...p,
-          startDate: new Date(p.startDate),
-          endDate: new Date(p.endDate),
-          createdAt: new Date(p.createdAt),
-          updatedAt: new Date(p.updatedAt),
-          teamMembers: (p.teamMembers as string[])
-            .map(id => this.mockDataService.getTeamMemberById(id))
-            .filter((m): m is NonNullable<typeof m> => !!m)
-        }));
-        this.projects.set(mappedProjects);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error('Error loading projects:', err);
-        this.error.set('Error al cargar los proyectos');
-        this.loading.set(false);
-      }
-    });
-  }
-
-  getProjectById(id: string): void {
+  async loadProjects(): Promise<void> {
     this.loading.set(true);
     this.error.set(null);
-    // Simulate API delay
-    setTimeout(() => {
-      // First try to find in loaded projects (includes newly created ones)
-      let project = this.projects().find(p => p.id === id);
 
-      // If not found, try mock data
-      if (!project) {
-        project = this.mockDataService.getProjectById(id);
-      }
+    try {
+      const { data: projectsData, error: projectsError } = await this.supabaseService.client
+        .from('projects')
+        .select(`
+          *,
+          status:project_statuses(*),
+          project_team_members(
+            team_member:team_members(*)
+          )
+        `)
+        .order('created_at', { ascending: false });
 
-      if (project) {
+      if (projectsError) throw projectsError;
+
+      const mappedProjects: Project[] = (projectsData || []).map(p => ({
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        status: {
+          label: p.status.label,
+          value: p.status.value,
+          color: p.status.color
+        },
+        startDate: new Date(p.start_date),
+        endDate: new Date(p.end_date),
+        progress: p.progress,
+        budget: p.budget,
+        teamMembers: (p.project_team_members || []).map((ptm: any) => ({
+          id: ptm.team_member.id,
+          name: ptm.team_member.name,
+          email: ptm.team_member.email,
+          role: ptm.team_member.role,
+          availability: ptm.team_member.availability
+        })),
+        createdAt: new Date(p.created_at),
+        updatedAt: new Date(p.updated_at)
+      }));
+
+      this.projects.set(mappedProjects);
+      this.loading.set(false);
+    } catch (err: any) {
+      console.error('Error loading projects:', err);
+      this.error.set('Error al cargar los proyectos');
+      this.loading.set(false);
+    }
+  }
+
+  async getProjectById(id: string): Promise<void> {
+    this.loading.set(true);
+    this.error.set(null);
+
+    try {
+      const { data: projectData, error: projectError } = await this.supabaseService.client
+        .from('projects')
+        .select(`
+          *,
+          status:project_statuses(*),
+          project_team_members(
+            team_member:team_members(*)
+          )
+        `)
+        .eq('id', id)
+        .single();
+
+      if (projectError) throw projectError;
+
+      if (projectData) {
+        const project: Project = {
+          id: projectData.id,
+          name: projectData.name,
+          description: projectData.description,
+          status: {
+            label: projectData.status.label,
+            value: projectData.status.value,
+            color: projectData.status.color
+          },
+          startDate: new Date(projectData.start_date),
+          endDate: new Date(projectData.end_date),
+          progress: projectData.progress,
+          budget: projectData.budget,
+          teamMembers: (projectData.project_team_members || []).map((ptm: any) => ({
+            id: ptm.team_member.id,
+            name: ptm.team_member.name,
+            email: ptm.team_member.email,
+            role: ptm.team_member.role,
+            availability: ptm.team_member.availability
+          })),
+          createdAt: new Date(projectData.created_at),
+          updatedAt: new Date(projectData.updated_at)
+        };
+
         this.selectedProject.set(project);
-        this.loading.set(false);
-      } else {
-        this.error.set('Proyecto no encontrado');
-        this.loading.set(false);
       }
-    }, 300);
+
+      this.loading.set(false);
+    } catch (err: any) {
+      console.error('Error loading project:', err);
+      this.error.set('Proyecto no encontrado');
+      this.loading.set(false);
+    }
   }
 
-  createProject(project: Partial<Project>): void {
+  async createProject(project: Partial<Project>): Promise<void> {
     this.loading.set(true);
-    // Simulate API delay
-    setTimeout(() => {
-      const newProject: Project = {
-        id: Date.now().toString(),
-        name: project.name || '',
-        description: project.description || '',
-        status: project.status || this.mockDataService.getProjectStatuses()[0],
-        startDate: project.startDate || new Date(),
-        endDate: project.endDate || new Date(),
-        teamMembers: project.teamMembers || [],
-        progress: project.progress || 0,
-        budget: project.budget || 0,
-        createdAt: new Date(),
-        updatedAt: new Date()
+    this.error.set(null);
+
+    try {
+      // Obtener el ID del estado por defecto
+      const { data: statusData } = await this.supabaseService.client
+        .from('project_statuses')
+        .select('id')
+        .eq('value', 'planning')
+        .single();
+
+      const { data: newProject, error: insertError } = await this.supabaseService.client
+        .from('projects')
+        .insert({
+          name: project.name,
+          description: project.description,
+          status_id: project.status?.value
+            ? (await this.supabaseService.client
+                .from('project_statuses')
+                .select('id')
+                .eq('value', project.status.value)
+                .single()).data?.id
+            : statusData?.id,
+          start_date: project.startDate,
+          end_date: project.endDate,
+          progress: project.progress || 0,
+          budget: project.budget || 0
+        })
+        .select(`
+          *,
+          status:project_statuses(*)
+        `)
+        .single();
+
+      if (insertError) throw insertError;
+
+      // Insertar relaciones con team members si existen
+      if (project.teamMembers && project.teamMembers.length > 0 && newProject) {
+        const teamMemberRelations = project.teamMembers.map(member => ({
+          project_id: newProject.id,
+          team_member_id: member.id
+        }));
+
+        await this.supabaseService.client
+          .from('project_team_members')
+          .insert(teamMemberRelations);
+      }
+
+      // Recargar proyectos
+      await this.loadProjects();
+      this.loading.set(false);
+    } catch (err: any) {
+      console.error('Error creating project:', err);
+      this.error.set('Error al crear el proyecto');
+      this.loading.set(false);
+    }
+  }
+
+  async updateProject(id: string, project: Partial<Project>): Promise<void> {
+    this.loading.set(true);
+    this.error.set(null);
+
+    try {
+      const updateData: any = {
+        name: project.name,
+        description: project.description,
+        start_date: project.startDate,
+        end_date: project.endDate,
+        progress: project.progress,
+        budget: project.budget
       };
-      this.projects.update(projects => [...projects, newProject]);
+
+      // Si hay cambio de estado, obtener el ID del estado
+      if (project.status?.value) {
+        const { data: statusData } = await this.supabaseService.client
+          .from('project_statuses')
+          .select('id')
+          .eq('value', project.status.value)
+          .single();
+
+        if (statusData) {
+          updateData.status_id = statusData.id;
+        }
+      }
+
+      const { error: updateError } = await this.supabaseService.client
+        .from('projects')
+        .update(updateData)
+        .eq('id', id);
+
+      if (updateError) throw updateError;
+
+      // Actualizar team members si están presentes
+      if (project.teamMembers) {
+        // Eliminar relaciones existentes
+        await this.supabaseService.client
+          .from('project_team_members')
+          .delete()
+          .eq('project_id', id);
+
+        // Insertar nuevas relaciones
+        if (project.teamMembers.length > 0) {
+          const teamMemberRelations = project.teamMembers.map(member => ({
+            project_id: id,
+            team_member_id: member.id
+          }));
+
+          await this.supabaseService.client
+            .from('project_team_members')
+            .insert(teamMemberRelations);
+        }
+      }
+
+      // Recargar proyectos
+      await this.loadProjects();
       this.loading.set(false);
-    }, 500);
+    } catch (err: any) {
+      console.error('Error updating project:', err);
+      this.error.set('Error al actualizar el proyecto');
+      this.loading.set(false);
+    }
   }
 
-  updateProject(id: string, project: Partial<Project>): void {
+  async deleteProject(id: string): Promise<void> {
     this.loading.set(true);
-    // Simulate API delay
-    setTimeout(() => {
-      this.projects.update(projects =>
-        projects.map(p => p.id === id ? { ...p, ...project, updatedAt: new Date() } : p)
-      );
-      this.loading.set(false);
-    }, 500);
-  }
+    this.error.set(null);
 
-  deleteProject(id: string): void {
-    this.loading.set(true);
-    // Simulate API delay
-    setTimeout(() => {
+    try {
+      const { error: deleteError } = await this.supabaseService.client
+        .from('projects')
+        .delete()
+        .eq('id', id);
+
+      if (deleteError) throw deleteError;
+
       this.projects.update(projects => projects.filter(p => p.id !== id));
       this.loading.set(false);
-    }, 500);
+    } catch (err: any) {
+      console.error('Error deleting project:', err);
+      this.error.set('Error al eliminar el proyecto');
+      this.loading.set(false);
+    }
   }
 
   searchProjects(query: string) {
@@ -123,5 +282,23 @@ export class ProjectsService {
     return computed(() =>
       this.projects().filter(p => p.status.label === status)
     );
+  }
+
+  async getProjectStatuses() {
+    const { data, error } = await this.supabaseService.client
+      .from('project_statuses')
+      .select('*')
+      .order('label');
+
+    if (error) {
+      console.error('Error loading project statuses:', error);
+      return [];
+    }
+
+    return (data || []).map(s => ({
+      label: s.label,
+      value: s.value,
+      color: s.color
+    }));
   }
 }

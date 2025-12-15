@@ -45,11 +45,15 @@ export class ProjectsBoardComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.projectsService.loadProjects();
+    this.loadData();
+  }
+
+  async loadData(): Promise<void> {
+    await this.projectsService.loadProjects();
   }
 
   onRetry(): void {
-    this.projectsService.loadProjects();
+    this.loadData();
   }
 
   // Drag and Drop handlers
@@ -80,7 +84,7 @@ export class ProjectsBoardComponent implements OnInit {
     }
   }
 
-  onDrop(event: DragEvent, targetColumnId: string): void {
+  async onDrop(event: DragEvent, targetColumnId: string): Promise<void> {
     event.preventDefault();
     const projectId = this.draggedProjectId();
 
@@ -111,7 +115,7 @@ export class ProjectsBoardComponent implements OnInit {
 
     if (newStatus) {
       // Update project status
-      this.projectsService.updateProject(projectId, { status: newStatus });
+      await this.projectsService.updateProject(projectId, { status: newStatus });
     }
 
     this.draggedProjectId.set(null);

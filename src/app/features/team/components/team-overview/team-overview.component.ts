@@ -37,10 +37,14 @@ export class TeamOverviewComponent implements OnInit {
   error = this.teamService.error;
 
   ngOnInit(): void {
-    this.teamService.loadTeam();
+    this.loadData();
+  }
+
+  async loadData(): Promise<void> {
+    await this.teamService.loadTeam();
   }
 
   onRetry(): void {
-    this.teamService.loadTeam();
+    this.loadData();
   }
 }

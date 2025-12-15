@@ -24,9 +24,9 @@ export class ProjectFormComponent {
     budget: [0, [Validators.required, Validators.min(0)]]
   });
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.projectForm.valid) {
-      this.projectsService.createProject(this.projectForm.value as any);
+      await this.projectsService.createProject(this.projectForm.value as any);
       this.router.navigate(['/proyectos']);
     }
   }

@@ -32,7 +32,11 @@ export class MemberDetailComponent implements OnInit {
   loading = this.teamService.loading;
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  async loadData(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) this.teamService.getMemberById(id);
+    if (id) await this.teamService.getMemberById(id);
   }
 }

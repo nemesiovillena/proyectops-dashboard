@@ -37,7 +37,11 @@ export class TaskDetailComponent implements OnInit {
   loading = this.tasksService.loading;
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  async loadData(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) this.tasksService.getTaskById(id);
+    if (id) await this.tasksService.getTaskById(id);
   }
 }
