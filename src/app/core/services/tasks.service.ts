@@ -37,7 +37,9 @@ export class TasksService {
         .select(`
           *,
           status:task_statuses(*),
-          assigned_to:team_members(*),
+          task_assignments!task_assignments_task_id_fkey(
+            team_member:team_members(*)
+          ),
           project:projects(*)
         `)
         .order('created_at', { ascending: false });
@@ -56,21 +58,14 @@ export class TasksService {
             value: t.status.value,
             color: t.status.color
           },
-          assignedTo: t.assigned_to ? {
-            id: t.assigned_to.id,
-            name: t.assigned_to.name,
-            email: t.assigned_to.email,
-            role: t.assigned_to.role,
-            availability: t.assigned_to.availability,
+          assignedTo: t.task_assignments ? t.task_assignments.map((ta: any) => ({
+            id: ta.team_member.id,
+            name: ta.team_member.name,
+            email: ta.team_member.email,
+            role: ta.team_member.role,
+            availability: ta.team_member.availability,
             projects: []
-          } : {
-            id: 'unassigned',
-            name: 'Sin asignar',
-            email: '',
-            role: '',
-            availability: 'available',
-            projects: []
-          },
+          })) : [],
           priority: t.priority,
           dueDate: new Date(t.due_date),
           estimatedHours: 0,
@@ -100,7 +95,9 @@ export class TasksService {
         .select(`
           *,
           status:task_statuses(*),
-          assigned_to:team_members(*),
+          task_assignments!task_assignments_task_id_fkey(
+            team_member:team_members(*)
+          ),
           project:projects(*)
         `)
         .eq('id', id)
@@ -119,21 +116,14 @@ export class TasksService {
             value: taskData.status.value,
             color: taskData.status.color
           },
-          assignedTo: taskData.assigned_to ? {
-            id: taskData.assigned_to.id,
-            name: taskData.assigned_to.name,
-            email: taskData.assigned_to.email,
-            role: taskData.assigned_to.role,
-            availability: taskData.assigned_to.availability,
+          assignedTo: taskData.task_assignments ? taskData.task_assignments.map((ta: any) => ({
+            id: ta.team_member.id,
+            name: ta.team_member.name,
+            email: ta.team_member.email,
+            role: ta.team_member.role,
+            availability: ta.team_member.availability,
             projects: []
-          } : {
-            id: 'unassigned',
-            name: 'Sin asignar',
-            email: '',
-            role: '',
-            availability: 'available',
-            projects: []
-          },
+          })) : [],
           priority: taskData.priority,
           dueDate: new Date(taskData.due_date),
           estimatedHours: 0,
@@ -162,7 +152,7 @@ export class TasksService {
 
   getTasksByMember(memberId: string) {
     return computed(() =>
-      this.tasks().filter(t => t.assignedTo.id === memberId)
+      this.tasks().filter(t => t.assignedTo.some(m => m.id === memberId))
     );
   }
 
@@ -178,25 +168,38 @@ export class TasksService {
         .eq('value', 'todo')
         .single();
 
-      const { error: insertError } = await this.supabaseService.client
+      const { data: newTask, error: insertError } = await this.supabaseService.client
         .from('tasks')
         .insert({
           title: task.title,
           description: task.description,
           status_id: task.status?.value
             ? (await this.supabaseService.client
-                .from('task_statuses')
-                .select('id')
-                .eq('value', task.status.value)
-                .single()).data?.id
+              .from('task_statuses')
+              .select('id')
+              .eq('value', task.status.value)
+              .single()).data?.id
             : statusData?.id,
           priority: task.priority || 'medium',
           due_date: task.dueDate,
-          project_id: task.projectId,
-          assigned_to_id: task.assignedTo?.id
-        });
+          project_id: task.projectId
+        })
+        .select()
+        .single();
 
       if (insertError) throw insertError;
+
+      // Insertar asignaciones
+      if (task.assignedTo && task.assignedTo.length > 0 && newTask) {
+        const assignments = task.assignedTo.map(member => ({
+          task_id: newTask.id,
+          team_member_id: member.id
+        }));
+
+        await this.supabaseService.client
+          .from('task_assignments')
+          .insert(assignments);
+      }
 
       // Recargar tareas
       await this.loadTasks();
@@ -218,8 +221,7 @@ export class TasksService {
         description: task.description,
         priority: task.priority,
         due_date: task.dueDate,
-        project_id: task.projectId,
-        assigned_to_id: task.assignedTo?.id
+        project_id: task.projectId
       };
 
       // Si hay cambio de estado, obtener el ID del estado
@@ -241,6 +243,27 @@ export class TasksService {
         .eq('id', id);
 
       if (updateError) throw updateError;
+
+      // Actualizar asignaciones si están presentes
+      if (task.assignedTo) {
+        // Eliminar existentes
+        await this.supabaseService.client
+          .from('task_assignments')
+          .delete()
+          .eq('task_id', id);
+
+        // Insertar nuevas
+        if (task.assignedTo.length > 0) {
+          const assignments = task.assignedTo.map(member => ({
+            task_id: id,
+            team_member_id: member.id
+          }));
+
+          await this.supabaseService.client
+            .from('task_assignments')
+            .insert(assignments);
+        }
+      }
 
       // Recargar tareas
       await this.loadTasks();

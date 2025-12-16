@@ -9,7 +9,7 @@ export interface Task {
   title: string;
   description: string;
   status: Status;
-  assignedTo: TeamMember;
+  assignedTo: TeamMember[];
   priority: TaskPriority;
   dueDate: Date;
   estimatedHours: number;

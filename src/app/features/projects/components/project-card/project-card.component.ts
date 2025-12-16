@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, Input, inject } from '@angular/core';
+import { RouterLink, Router } from '@angular/router';
 import { Project } from '@core/models';
 import { CardComponent } from '@shared/components';
 import { DateFormatPipe, TruncatePipe } from '@shared/pipes';
@@ -12,5 +12,10 @@ import { DateFormatPipe, TruncatePipe } from '@shared/pipes';
   styleUrl: './project-card.component.scss'
 })
 export class ProjectCardComponent {
+  private router = inject(Router);
   @Input({ required: true }) project!: Project;
+
+  navigateToProject(): void {
+    this.router.navigate(['/proyectos', this.project.id]);
+  }
 }

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { TasksService } from '@core/services/tasks.service';
 import { ProjectsService } from '@core/services/projects.service';
@@ -18,7 +18,11 @@ export class TaskFormComponent implements OnInit {
   private tasksService = inject(TasksService);
   private projectsService = inject(ProjectsService);
   private teamService = inject(TeamService);
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
+
+  taskId: string | null = null;
+  isEditing = false;
 
   projects = this.projectsService.projects;
   teamMembers = this.teamService.teamMembers;
@@ -26,13 +30,15 @@ export class TaskFormComponent implements OnInit {
   taskForm = this.fb.group({
     title: ['', Validators.required],
     projectId: ['', Validators.required],
-    assignedToId: ['', Validators.required],
+    assignedToIds: [[] as string[], Validators.required],
     priority: ['medium', Validators.required],
     dueDate: ['', Validators.required],
     description: ['']
   });
 
   ngOnInit() {
+    this.taskId = this.route.snapshot.paramMap.get('id');
+    this.isEditing = !!this.taskId;
     this.loadData();
   }
 
@@ -41,21 +47,58 @@ export class TaskFormComponent implements OnInit {
       this.projectsService.loadProjects(),
       this.teamService.loadTeam()
     ]);
+
+    if (this.isEditing && this.taskId) {
+      await this.tasksService.getTaskById(this.taskId);
+      const task = this.tasksService.selectedTask();
+
+      if (task) {
+        this.taskForm.patchValue({
+          title: task.title,
+          projectId: task.projectId,
+          assignedToIds: task.assignedTo.map(m => m.id),
+          priority: task.priority,
+          dueDate: new Date(task.dueDate).toISOString().split('T')[0],
+          description: task.description
+        });
+      }
+    }
+  }
+
+  toggleMember(memberId: string, event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    const currentIds = this.taskForm.value.assignedToIds || [];
+
+    if (checkbox.checked) {
+      this.taskForm.patchValue({
+        assignedToIds: [...currentIds, memberId]
+      });
+    } else {
+      this.taskForm.patchValue({
+        assignedToIds: currentIds.filter(id => id !== memberId)
+      });
+    }
   }
 
   async onSubmit(): Promise<void> {
     if (this.taskForm.valid) {
       const formValue = this.taskForm.value;
-      const assignedToId = formValue.assignedToId;
+      const assignedToIds = formValue.assignedToIds as string[];
 
-      await this.tasksService.createTask({
+      const taskData = {
         title: formValue.title || '',
         description: formValue.description || '',
         projectId: formValue.projectId || '',
         priority: formValue.priority as any,
         dueDate: new Date(formValue.dueDate!),
-        assignedTo: assignedToId ? { id: assignedToId } as any : undefined
-      });
+        assignedTo: assignedToIds.map(id => ({ id })) as any
+      };
+
+      if (this.isEditing && this.taskId) {
+        await this.tasksService.updateTask(this.taskId, taskData);
+      } else {
+        await this.tasksService.createTask(taskData);
+      }
 
       this.router.navigate(['/tareas']);
     }

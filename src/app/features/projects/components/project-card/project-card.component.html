@@ -1,4 +1,4 @@
-<a [routerLink]="['/proyectos', project.id]"
+<div (click)="navigateToProject()"
   class="block bg-white rounded-2xl shadow-soft hover:shadow-medium transition-all duration-300 p-5 border border-neutral-100 hover:border-primary-200 group cursor-pointer">
   <!-- Status Badge -->
   <div class="flex items-center justify-between mb-4">
@@ -33,6 +33,7 @@
   </div>
 
   <!-- Footer -->
+  <!-- Footer -->
   <div class="flex items-center justify-between text-xs text-neutral-500">
     <div class="flex items-center space-x-1">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,5 +42,10 @@
       </svg>
       <span>Vencimiento: {{ project.endDate | dateFormat:'short' }}</span>
     </div>
+
+    <button [routerLink]="['/proyectos/editar', project.id]" (click)="$event.stopPropagation()"
+      class="text-primary-600 hover:text-primary-700 font-medium px-2 py-1 rounded hover:bg-primary-50 transition-colors">
+      Editar
+    </button>
   </div>
-</a>
+</div>

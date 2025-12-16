@@ -150,7 +150,7 @@ export class TeamService {
     }
   }
 
-  async deleteMember(id: string): Promise<void> {
+  async deleteMember(id: string): Promise<boolean> {
     this.loading.set(true);
     this.error.set(null);
 
@@ -164,10 +164,12 @@ export class TeamService {
 
       this.teamMembers.update(members => members.filter(m => m.id !== id));
       this.loading.set(false);
+      return true;
     } catch (err: any) {
       console.error('Error deleting team member:', err);
-      this.error.set('Error al eliminar el miembro del equipo');
+      this.error.set('Error al eliminar el miembro del equipo. Verifica que no tenga proyectos asignados.');
       this.loading.set(false);
+      return false;
     }
   }
 

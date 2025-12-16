@@ -13,6 +13,10 @@ export const projectsRoutes: Routes = [
     component: ProjectFormComponent
   },
   {
+    path: 'editar/:id',
+    component: ProjectFormComponent
+  },
+  {
     path: ':id',
     component: ProjectDetailComponent
   }

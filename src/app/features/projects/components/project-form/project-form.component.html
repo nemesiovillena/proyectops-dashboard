@@ -1,7 +1,7 @@
 <div class="project-form">
   <div class="project-form-header">
-    <a routerLink="/projects" class="back-link">← Volver a Proyectos</a>
-    <h1>Nuevo Proyecto</h1>
+    <a routerLink="/proyectos" class="back-link">← Volver a Proyectos</a>
+    <h1>{{ title }}</h1>
   </div>
 
   <app-card>
@@ -34,9 +34,9 @@
       </div>
 
       <div class="form-actions">
-        <app-button type="submit" variant="primary" [disabled]="projectForm.invalid">Crear Proyecto</app-button>
+        <app-button type="submit" variant="primary" [disabled]="projectForm.invalid">{{ submitLabel }}</app-button>
         <app-button type="button" variant="secondary">
-          <a routerLink="/projects">Cancelar</a>
+          <a routerLink="/proyectos">Cancelar</a>
         </app-button>
       </div>
     </form>

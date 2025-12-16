@@ -156,7 +156,7 @@ export class MockDataService {
       title: 'Design new homepage layout',
       description: 'Create mockups and prototypes for the new homepage design',
       status: this.taskStatuses[3], // Completed
-      assignedTo: this.mockTeamMembers[2],
+      assignedTo: [this.mockTeamMembers[2]],
       priority: 'high',
       dueDate: new Date('2024-03-15'),
       estimatedHours: 16,
@@ -171,7 +171,7 @@ export class MockDataService {
       title: 'Implement product listing component',
       description: 'Build reusable product listing component with filtering and sorting',
       status: this.taskStatuses[1], // In Progress
-      assignedTo: this.mockTeamMembers[0],
+      assignedTo: [this.mockTeamMembers[0], this.mockTeamMembers[1]],
       priority: 'high',
       dueDate: new Date('2024-04-05'),
       estimatedHours: 24,
@@ -186,7 +186,7 @@ export class MockDataService {
       title: 'Set up payment gateway integration',
       description: 'Integrate Stripe payment gateway with backend APIs',
       status: this.taskStatuses[0], // Todo
-      assignedTo: this.mockTeamMembers[1],
+      assignedTo: [this.mockTeamMembers[1]],
       priority: 'critical',
       dueDate: new Date('2024-04-20'),
       estimatedHours: 32,
@@ -201,7 +201,7 @@ export class MockDataService {
       title: 'Design mobile app wireframes',
       description: 'Create wireframes for all major screens of the mobile app',
       status: this.taskStatuses[3], // Completed
-      assignedTo: this.mockTeamMembers[2],
+      assignedTo: [this.mockTeamMembers[2]],
       priority: 'high',
       dueDate: new Date('2024-02-28'),
       estimatedHours: 20,
@@ -216,7 +216,7 @@ export class MockDataService {
       title: 'Implement user authentication',
       description: 'Build authentication flow with biometric support',
       status: this.taskStatuses[1], // In Progress
-      assignedTo: this.mockTeamMembers[0],
+      assignedTo: [this.mockTeamMembers[0], this.mockTeamMembers[4]],
       priority: 'critical',
       dueDate: new Date('2024-04-10'),
       estimatedHours: 28,
@@ -231,7 +231,7 @@ export class MockDataService {
       title: 'AWS infrastructure audit',
       description: 'Conduct comprehensive audit of current infrastructure',
       status: this.taskStatuses[2], // Review
-      assignedTo: this.mockTeamMembers[4],
+      assignedTo: [this.mockTeamMembers[4]],
       priority: 'medium',
       dueDate: new Date('2024-04-15'),
       estimatedHours: 16,
@@ -246,7 +246,7 @@ export class MockDataService {
       title: 'Performance optimization',
       description: 'Optimize frontend performance and reduce bundle size',
       status: this.taskStatuses[0], // Todo
-      assignedTo: this.mockTeamMembers[0],
+      assignedTo: [this.mockTeamMembers[0]],
       priority: 'medium',
       dueDate: new Date('2024-05-01'),
       estimatedHours: 20,
@@ -261,7 +261,7 @@ export class MockDataService {
       title: 'Push notifications setup',
       description: 'Configure push notifications for iOS and Android',
       status: this.taskStatuses[0], // Todo
-      assignedTo: this.mockTeamMembers[0],
+      assignedTo: [this.mockTeamMembers[0]],
       priority: 'low',
       dueDate: new Date('2024-05-15'),
       estimatedHours: 12,
