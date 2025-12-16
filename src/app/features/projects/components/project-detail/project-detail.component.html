@@ -39,10 +39,75 @@
         <p>${{ project()!.budget.toLocaleString() }}</p>
       </div>
 
+      <!-- Tareas del Proyecto -->
+      <div class="info-section">
+        <h3>Tareas del Proyecto</h3>
+        @if (projectTasks().length > 0) {
+        <div class="tasks-list">
+          @for (task of projectTasks(); track task.id) {
+          <a [routerLink]="['/tareas', task.id]"
+            class="task-item block hover:shadow-md transition-shadow cursor-pointer no-underline">
+            <div class="task-header">
+              <div class="task-status-icon">
+                @if (task.status.label === 'Completado') {
+                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                } @else {
+                <svg class="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                }
+              </div>
+              <div class="task-content">
+                <h4 class="task-title group-hover:text-primary-600 transition-colors">{{ task.title }}</h4>
+                <p class="task-description">{{ task.description }}</p>
+              </div>
+            </div>
+            <div class="task-meta">
+              <span class="task-priority" [ngClass]="{
+                      'priority-critical': task.priority === 'critical',
+                      'priority-high': task.priority === 'high',
+                      'priority-medium': task.priority === 'medium',
+                      'priority-low': task.priority === 'low'
+                    }">
+                {{ task.priority }}
+              </span>
+              <span class="task-status" [style.background-color]="task.status.color">
+                {{ task.status.label }}
+              </span>
+              <span class="task-due-date">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {{ task.dueDate | dateFormat:'short' }}
+              </span>
+            </div>
+            @if (task.assignedTo.length > 0) {
+            <div class="task-assigned">
+              <span class="assigned-label">Asignado a:</span>
+              @for (member of task.assignedTo; track member.id) {
+              <span class="assigned-member">{{ member.name }}</span>
+              }
+            </div>
+            }
+          </a>
+          }
+        </div>
+        } @else {
+        <p class="no-tasks">No hay tareas asignadas a este proyecto.</p>
+        }
+      </div>
+
+      <!-- Miembros del Equipo con Tareas -->
+      @if (teamMembersWithTasks().length > 0) {
       <div class="info-section">
         <h3>Miembros del Equipo</h3>
         <div class="team-members">
-          @for (member of project()!.teamMembers; track member.id) {
+          @for (member of teamMembersWithTasks(); track member.id) {
           <div class="team-member">
             <div class="member-avatar">{{ member.name.charAt(0) }}</div>
             <div class="member-info">
@@ -53,6 +118,7 @@
           }
         </div>
       </div>
+      }
     </div>
   </app-card>
   }

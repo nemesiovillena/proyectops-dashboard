@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ProjectsService, MockDataService } from '@core/services';
+import { ProjectsService, MockDataService, TasksService } from '@core/services';
 import { CardComponent, LoadingSpinnerComponent, ErrorMessageComponent } from '@shared/components';
 import { ProjectCardComponent } from '../project-card/project-card.component';
 import { Project } from '@core/models';
@@ -14,10 +14,11 @@ import { Project } from '@core/models';
 })
 export class ProjectsBoardComponent implements OnInit {
   private projectsService = inject(ProjectsService);
+  private tasksService = inject(TasksService);
   private mockDataService = inject(MockDataService);
 
   projects = this.projectsService.projects;
-  loading = this.projectsService.loading;
+  loading = computed(() => this.projectsService.loading() || this.tasksService.loading());
   error = this.projectsService.error;
 
   // Drag state
@@ -49,7 +50,10 @@ export class ProjectsBoardComponent implements OnInit {
   }
 
   async loadData(): Promise<void> {
-    await this.projectsService.loadProjects();
+    await Promise.all([
+      this.projectsService.loadProjects(),
+      this.tasksService.loadTasks()
+    ]);
   }
 
   onRetry(): void {
@@ -120,5 +124,9 @@ export class ProjectsBoardComponent implements OnInit {
 
     this.draggedProjectId.set(null);
     this.dragOverColumnId.set(null);
+  }
+
+  async onDeleteProject(projectId: string): Promise<void> {
+    await this.projectsService.deleteProject(projectId);
   }
 }

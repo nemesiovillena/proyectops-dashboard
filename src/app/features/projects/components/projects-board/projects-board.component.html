@@ -4,7 +4,7 @@
     <div>
       <h1 class="text-3xl font-bold text-neutral-900 mb-2">Tablero de Proyectos</h1>
       <p class="text-neutral-600">
-        Gestiona tus proyectos con un tablero kanban visual
+        Gestiona todos tus proyectos
         <span class="ml-2 px-2 py-1 bg-primary-50 text-primary-700 rounded-lg text-sm font-medium">
           {{ projects().length }} Total
         </span>
@@ -47,7 +47,7 @@
         <div class="transition-all duration-200" [class.opacity-50]="draggedProjectId() === project.id"
           [class.scale-105]="draggedProjectId() === project.id" draggable="true"
           (dragstart)="onDragStart($event, project.id)" (dragend)="onDragEnd()">
-          <app-project-card [project]="project"></app-project-card>
+          <app-project-card [project]="project" (delete)="onDeleteProject($event)"></app-project-card>
         </div>
         } @empty {
         <div class="text-center py-8">

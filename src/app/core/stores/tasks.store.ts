@@ -38,7 +38,7 @@ class TasksStore {
     }
 
     if (filters.assignedTo) {
-      result = result.filter(t => t.assignedTo.id === filters.assignedTo);
+      result = result.filter(t => t.assignedTo.some(member => member.id === filters.assignedTo));
     }
 
     if (filters.search) {
