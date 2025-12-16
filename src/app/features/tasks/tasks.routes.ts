@@ -1,8 +1,23 @@
 import { Routes } from '@angular/router';
+import { TasksListComponent } from './components/tasks-list/tasks-list.component';
+import { TaskFormComponent } from './components/task-form/task-form.component';
+import { TaskDetailComponent } from './components/task-detail/task-detail.component';
 
 export const tasksRoutes: Routes = [
-  { path: '', loadComponent: () => import('./components/tasks-list/tasks-list.component').then(m => m.TasksListComponent) },
-  { path: 'nuevo', loadComponent: () => import('./components/task-form/task-form.component').then(m => m.TaskFormComponent) },
-  { path: 'editar/:id', loadComponent: () => import('./components/task-form/task-form.component').then(m => m.TaskFormComponent) },
-  { path: ':id', loadComponent: () => import('./components/task-detail/task-detail.component').then(m => m.TaskDetailComponent) }
+  {
+    path: '',
+    component: TasksListComponent
+  },
+  {
+    path: 'nuevo',
+    component: TaskFormComponent
+  },
+  {
+    path: 'editar/:id',
+    component: TaskFormComponent
+  },
+  {
+    path: ':id',
+    component: TaskDetailComponent
+  }
 ];

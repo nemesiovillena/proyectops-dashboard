@@ -21,7 +21,7 @@ export class ProjectStatusStatsComponent {
 
         return statuses.map(status => ({
             status,
-            count: projects.filter(p => p.status.id === status.id).length
+            count: projects.filter(p => p.status.label === status.label).length
         }));
     });
 }
