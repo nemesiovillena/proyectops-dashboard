@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TasksService, MockDataService } from '@core/services';
+import { TasksService, MockDataService, ProjectsService } from '@core/services';
 import { LoadingSpinnerComponent, ErrorMessageComponent } from '@shared/components';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { Task } from '@core/models';
@@ -15,6 +15,7 @@ import { Task } from '@core/models';
 export class TasksListComponent implements OnInit {
   private tasksService = inject(TasksService);
   private mockDataService = inject(MockDataService);
+  private projectsService = inject(ProjectsService);
 
   tasks = this.tasksService.tasks;
   loading = this.tasksService.loading;
@@ -116,9 +117,18 @@ export class TasksListComponent implements OnInit {
     if (newStatus) {
       // Update task status
       await this.tasksService.updateTask(taskId, { status: newStatus });
+
+      // Recargar proyectos para actualizar el progreso
+      await this.projectsService.loadProjects();
     }
 
     this.draggedTaskId.set(null);
     this.dragOverColumnId.set(null);
+  }
+
+  async onDeleteTask(taskId: string): Promise<void> {
+    await this.tasksService.deleteTask(taskId);
+    // Recargar proyectos para actualizar el progreso
+    await this.projectsService.loadProjects();
   }
 }

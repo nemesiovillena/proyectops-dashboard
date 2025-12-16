@@ -36,28 +36,50 @@ export class ProjectsService {
 
       if (projectsError) throw projectsError;
 
-      const mappedProjects: Project[] = (projectsData || []).map(p => ({
-        id: p.id,
-        name: p.name,
-        description: p.description,
-        status: {
-          label: p.status.label,
-          value: p.status.value,
-          color: p.status.color
-        },
-        startDate: new Date(p.start_date),
-        endDate: new Date(p.end_date),
-        progress: p.progress,
-        budget: p.budget,
-        teamMembers: (p.project_team_members || []).map((ptm: any) => ({
-          id: ptm.team_member.id,
-          name: ptm.team_member.name,
-          email: ptm.team_member.email,
-          role: ptm.team_member.role,
-          availability: ptm.team_member.availability
-        })),
-        createdAt: new Date(p.created_at),
-        updatedAt: new Date(p.updated_at)
+      // Obtener todas las tareas para calcular el progreso
+      const { data: tasksData } = await this.supabaseService.client
+        .from('tasks')
+        .select('id, project_id, status:task_statuses(label)');
+
+      const mappedProjects: Project[] = await Promise.all((projectsData || []).map(async (p) => {
+        // Calcular progreso basado en tareas completadas
+        const projectTasks = (tasksData || []).filter((t: any) => t.project_id === p.id);
+        const completedTasks = projectTasks.filter((t: any) => t.status?.label === 'Completado');
+        const calculatedProgress = projectTasks.length > 0
+          ? Math.round((completedTasks.length / projectTasks.length) * 100)
+          : 0;
+
+        // Actualizar progreso en la base de datos si cambió
+        if (calculatedProgress !== p.progress) {
+          await this.supabaseService.client
+            .from('projects')
+            .update({ progress: calculatedProgress })
+            .eq('id', p.id);
+        }
+
+        return {
+          id: p.id,
+          name: p.name,
+          description: p.description,
+          status: {
+            label: p.status.label,
+            value: p.status.value,
+            color: p.status.color
+          },
+          startDate: new Date(p.start_date),
+          endDate: new Date(p.end_date),
+          progress: calculatedProgress,
+          budget: p.budget,
+          teamMembers: (p.project_team_members || []).map((ptm: any) => ({
+            id: ptm.team_member.id,
+            name: ptm.team_member.name,
+            email: ptm.team_member.email,
+            role: ptm.team_member.role,
+            availability: ptm.team_member.availability
+          })),
+          createdAt: new Date(p.created_at),
+          updatedAt: new Date(p.updated_at)
+        };
       }));
 
       this.projects.set(mappedProjects);
@@ -89,6 +111,26 @@ export class ProjectsService {
       if (projectError) throw projectError;
 
       if (projectData) {
+        // Calcular progreso basado en tareas completadas
+        const { data: tasksData } = await this.supabaseService.client
+          .from('tasks')
+          .select('id, status:task_statuses(label)')
+          .eq('project_id', id);
+
+        const projectTasks = tasksData || [];
+        const completedTasks = projectTasks.filter((t: any) => t.status?.label === 'Completado');
+        const calculatedProgress = projectTasks.length > 0
+          ? Math.round((completedTasks.length / projectTasks.length) * 100)
+          : 0;
+
+        // Actualizar progreso en la base de datos si cambió
+        if (calculatedProgress !== projectData.progress) {
+          await this.supabaseService.client
+            .from('projects')
+            .update({ progress: calculatedProgress })
+            .eq('id', id);
+        }
+
         const project: Project = {
           id: projectData.id,
           name: projectData.name,
@@ -100,7 +142,7 @@ export class ProjectsService {
           },
           startDate: new Date(projectData.start_date),
           endDate: new Date(projectData.end_date),
-          progress: projectData.progress,
+          progress: calculatedProgress,
           budget: projectData.budget,
           teamMembers: (projectData.project_team_members || []).map((ptm: any) => ({
             id: ptm.team_member.id,

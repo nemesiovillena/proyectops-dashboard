@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Task } from '@core/models';
@@ -13,4 +13,11 @@ import { DateFormatPipe, TruncatePipe } from '@shared/pipes';
 })
 export class TaskCardComponent {
   @Input({ required: true }) task!: Task;
+  @Output() delete = new EventEmitter<string>();
+
+  onDelete(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.delete.emit(this.task.id);
+  }
 }

@@ -47,7 +47,7 @@
         <div class="transition-all duration-200" [class.opacity-50]="draggedTaskId() === task.id"
           [class.scale-105]="draggedTaskId() === task.id" draggable="true" (dragstart)="onDragStart($event, task.id)"
           (dragend)="onDragEnd()">
-          <app-task-card [task]="task"></app-task-card>
+          <app-task-card [task]="task" (delete)="onDeleteTask($event)"></app-task-card>
         </div>
         } @empty {
         <div class="text-center py-8">
