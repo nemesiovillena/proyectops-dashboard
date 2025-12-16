@@ -4,7 +4,7 @@
     <div>
       <h1 class="text-3xl font-bold text-neutral-900 mb-2">Tablero de Tareas</h1>
       <p class="text-neutral-600">
-        Gestiona tus tareas con un tablero kanban visual
+        Gestiona tus tareas en el tablero
         <span class="ml-2 px-2 py-1 bg-primary-50 text-primary-700 rounded-lg text-sm font-medium">
           {{ tasks().length }} Total
         </span>
@@ -45,8 +45,8 @@
       <div class="space-y-3">
         @for (task of tasksByStatus()[column.id]; track task.id) {
         <div class="transition-all duration-200" [class.opacity-50]="draggedTaskId() === task.id"
-          [class.scale-105]="draggedTaskId() === task.id" draggable="true"
-          (dragstart)="onDragStart($event, task.id)" (dragend)="onDragEnd()">
+          [class.scale-105]="draggedTaskId() === task.id" draggable="true" (dragstart)="onDragStart($event, task.id)"
+          (dragend)="onDragEnd()">
           <app-task-card [task]="task"></app-task-card>
         </div>
         } @empty {
